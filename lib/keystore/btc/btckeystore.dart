@@ -2,8 +2,10 @@ import 'dart:typed_data';
 import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
+
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:bitcoin_flutter/bitcoin_flutter.dart';
+
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:bitcoin_flutter/bitcoin_flutter.dart' show bitcoin, testnet;
 
@@ -38,11 +40,11 @@ class BTCKeystore extends Keystore {
   }
 
   String privateKey(String password) {
-    return bytesToHex(ECPair.fromWIF(wif(password)).privateKey);
+    return bytesToHex(ECPair.fromWIF(wif(password)).privateKey!);
   }
 
   String publicKey(String password) {
-    return bytesToHex(ECPair.fromWIF(wif(password)).publicKey);
+    return bytesToHex(ECPair.fromWIF(wif(password)).publicKey!);
   }
 
   factory BTCKeystore.fromJson(Map<String, dynamic> json) {

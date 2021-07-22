@@ -16,14 +16,14 @@ class PublicKey implements Key {
 
   PublicKey.fromHex(String publicKey) : this.fromBytes(hexToBytes(publicKey));
 
-  Uint8List toBytes() => ecPair.publicKey;
+  Uint8List toBytes() => ecPair.publicKey!;
 
-  String toHex() => bytesToHex(ecPair.publicKey);
+  String toHex() => bytesToHex(ecPair.publicKey!);
 
-  bool get compressed => ecPair.publicKey[0] != 0x04;
+  bool get compressed => ecPair.publicKey![0] != 0x04;
 
   bool verify(Uint8List hash, Uint8List signature, {bool? compressed}) {
-    return ecc.verify(hash, _ecPair(ecPair, compressed: compressed).publicKey, signature);
+    return ecc.verify(hash, _ecPair(ecPair, compressed: compressed).publicKey!, signature);
   }
 }
 
@@ -38,16 +38,16 @@ class PrivateKey implements Key {
 
   PrivateKey.fromWIF(String wif) : ecPair = ECPair.fromWIF(wif); // here `network.wif` and `compressed` may matter
 
-  Uint8List toBytes() => ecPair.privateKey;
+  Uint8List toBytes() => ecPair.privateKey!;
 
-  String toHex() => bytesToHex(ecPair.privateKey);
+  String toHex() => bytesToHex(ecPair.privateKey!);
 
   String toWIF({NetworkType? network, int? wif, bool? compressed}) {
     return _ecPair(ecPair, network: network, wif: wif, compressed: compressed).toWIF();
   }
 
   PublicKey publicKey({bool? compressed}) {
-    return PublicKey.fromBytes(_ecPair(ecPair, compressed: compressed).publicKey);
+    return PublicKey.fromBytes(_ecPair(ecPair, compressed: compressed).publicKey!);
   }
 
   Uint8List sign(Uint8List hash) {
@@ -55,7 +55,7 @@ class PrivateKey implements Key {
   }
 
   bool verify(Uint8List hash, Uint8List signature, {bool? compressed}) {
-    return ecc.verify(hash, publicKey(compressed: compressed).ecPair.publicKey, signature);
+    return ecc.verify(hash, publicKey(compressed: compressed).ecPair.publicKey!, signature);
   }
 }
 
@@ -68,7 +68,7 @@ ECPair _ecPair(ECPair ecPair, {NetworkType? network, int? wif, bool? compressed}
       // prefer `network` than `wif`
       network = _networkForWIF(wif);
     }
-    ecp = ECPair.fromPrivateKey(ecp.privateKey, network: network, compressed: compressed);
+    ecp = ECPair.fromPrivateKey(ecp.privateKey!, network: network, compressed: compressed);
   }
   return ecp;
 }

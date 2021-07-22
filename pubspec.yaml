@@ -106,7 +106,7 @@ dependency_overrides:
       ref: master
   bitcoin_flutter:
     git:
-      url: https://github.com/dart-bitcoin/bitcoin_flutter
+      url: https://github.com/cochainio/bitcoin_flutter
       ref: master
 
 # The following section is specific to Flutter.
@@ -118,9 +118,14 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - packages/bip39/src/wordlists/chinese_simplified.json
+    - packages/bip39/src/wordlists/chinese_traditional.json
+    - packages/bip39/src/wordlists/french.json
+    - packages/bip39/src/wordlists/italian.json
+    - packages/bip39/src/wordlists/japanese.json
+    - packages/bip39/src/wordlists/korean.json
+    - packages/bip39/src/wordlists/spanish.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

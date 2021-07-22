@@ -1,8 +1,10 @@
 # coefi
 
-The most trusted secure crypto wallet with 100% open source.
+The most trusted secure crypto wallet with **100%** open source.
 
 ## Why another crypto wallet?
+
+## Why Flutter/Dart?
 
 ## Getting Started
 

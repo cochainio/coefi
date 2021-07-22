@@ -15,7 +15,7 @@ class Mnemonic {
   static const ChineseTraditional = '中文繁体';
 
   // ignore: constant_identifier_names
-  static const English = 'English ';
+  static const English = 'English';
 
   // ignore: constant_identifier_names
   static const French = 'Français';
