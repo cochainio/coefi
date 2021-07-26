@@ -27,7 +27,8 @@ enum KeystoreType {
 class KeystoreMeta {
   KeystoreMeta();
 
-  factory KeystoreMeta.fromJson(Map<String, dynamic> json) => _$KeystoreMetaFromJson(json);
+  factory KeystoreMeta.fromJson(Map<String, dynamic> json) =>
+      _$KeystoreMetaFromJson(json);
 
   Map<String, dynamic> toJson() => _$KeystoreMetaToJson(this);
 }
@@ -42,7 +43,11 @@ class Keystore {
 
   static const defaultVersion = 3;
 
-  Keystore({String? id, this.version = defaultVersion, Crypto? crypto, KeystoreMeta? meta})
+  Keystore(
+      {String? id,
+      this.version = defaultVersion,
+      Crypto? crypto,
+      KeystoreMeta? meta})
       : id = id ?? const Uuid().v4(options: {'grng': UuidUtil.cryptoRNG}),
         meta = meta ?? KeystoreMeta() {
     if (crypto != null) {
@@ -51,7 +56,8 @@ class Keystore {
     preValidate();
   }
 
-  factory Keystore.from(String password, Uint8List secret, {String? id, KeystoreMeta? meta, bool clearCache = true}) {
+  factory Keystore.from(String password, Uint8List secret,
+      {String? id, KeystoreMeta? meta, bool clearCache = true}) {
     final k = Keystore(id: id, meta: meta);
     k.crypto = Crypto.from(password, secret, cacheDerivedKey: !clearCache);
     return k;
@@ -71,11 +77,14 @@ class Keystore {
     }
   }
 
-  bool validate(String password, {bool willThrow = false, bool cacheDerivedKey = false}) {
-    return crypto.validate(password, willThrow: willThrow, cacheDerivedKey: cacheDerivedKey);
+  bool validate(String password,
+      {bool willThrow = false, bool cacheDerivedKey = false}) {
+    return crypto.validate(password,
+        willThrow: willThrow, cacheDerivedKey: cacheDerivedKey);
   }
 
-  void changePassword(String password, String newPassword, {bool cacheDerivedKey = false}) {
+  void changePassword(String password, String newPassword,
+      {bool cacheDerivedKey = false}) {
     validate(password, willThrow: true, cacheDerivedKey: true);
     final secret = crypto.secret(password);
     crypto = Crypto.from(newPassword, secret, cacheDerivedKey: cacheDerivedKey);
@@ -89,7 +98,8 @@ class Keystore {
     return jsonEncode(this);
   }
 
-  factory Keystore.fromJson(Map<String, dynamic> json) => _$KeystoreFromJson(json);
+  factory Keystore.fromJson(Map<String, dynamic> json) =>
+      _$KeystoreFromJson(json);
 
   Map<String, dynamic> toJson() => _$KeystoreToJson(this);
 }
@@ -117,23 +127,30 @@ class MnemonicKeystore extends Keystore {
     // Generate random mnemonic
     mnemonic ??= Mnemonic.generateMnemonic(language);
 
-    final master = BIP32.fromSeed(Mnemonic.mnemonicToSeed(mnemonic), isMainnet ? BITCOIN : TESTNET);
-    final extendedPrivateKey = hdPath == null ? master : master.derivePath(hdPath!);
-    crypto = Crypto.from(password, extendedPrivateKey.privateKey!, cacheDerivedKey: true);
-    encryptedMnemonic = crypto.encryptMessage(password, utf8.encode(mnemonic) as Uint8List);
-    encryptedExtendedPrivateKey =
-        crypto.encryptMessage(password, utf8.encode(extendedPrivateKey.toBase58()) as Uint8List);
+    final master = BIP32.fromSeed(
+        Mnemonic.mnemonicToSeed(mnemonic), isMainnet ? BITCOIN : TESTNET);
+    final extendedPrivateKey =
+        hdPath == null ? master : master.derivePath(hdPath!);
+    crypto = Crypto.from(password, extendedPrivateKey.privateKey!,
+        cacheDerivedKey: true);
+    encryptedMnemonic =
+        crypto.encryptMessage(password, utf8.encode(mnemonic) as Uint8List);
+    encryptedExtendedPrivateKey = crypto.encryptMessage(
+        password, utf8.encode(extendedPrivateKey.toBase58()) as Uint8List);
     if (clearCache) this.clearCache();
   }
 
   @override
-  void changePassword(String password, String newPassword, {bool cacheDerivedKey = false}) {
+  void changePassword(String password, String newPassword,
+      {bool cacheDerivedKey = false}) {
     this.cacheDerivedKey(password);
     final mnemonic = this.mnemonic(password);
     final extendedPrivateKey = base58(password);
     super.changePassword(password, newPassword, cacheDerivedKey: true);
-    encryptedMnemonic = crypto.encryptMessage(newPassword, utf8.encode(mnemonic) as Uint8List);
-    encryptedExtendedPrivateKey = crypto.encryptMessage(newPassword, utf8.encode(extendedPrivateKey) as Uint8List);
+    encryptedMnemonic =
+        crypto.encryptMessage(newPassword, utf8.encode(mnemonic) as Uint8List);
+    encryptedExtendedPrivateKey = crypto.encryptMessage(
+        newPassword, utf8.encode(extendedPrivateKey) as Uint8List);
     if (!cacheDerivedKey) clearCache();
   }
 
@@ -146,7 +163,8 @@ class MnemonicKeystore extends Keystore {
   }
 
   String base58(String password) {
-    return utf8.decode(crypto.decryptMessage(password, encryptedExtendedPrivateKey));
+    return utf8
+        .decode(crypto.decryptMessage(password, encryptedExtendedPrivateKey));
   }
 
   factory MnemonicKeystore.fromJson(Map<String, dynamic> json) {

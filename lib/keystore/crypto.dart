@@ -33,7 +33,8 @@ class CipherParams {
   @JsonKey(toJson: bytesToHex, fromJson: hexToBytes)
   Uint8List iv; // 128-bit initialisation vector for the cipher
 
-  factory CipherParams.fromJson(Map<String, dynamic> json) => _$CipherParamsFromJson(json);
+  factory CipherParams.fromJson(Map<String, dynamic> json) =>
+      _$CipherParamsFromJson(json);
 
   Map<String, dynamic> toJson() => _$CipherParamsToJson(this);
 }
@@ -58,7 +59,8 @@ abstract class KdfDerivator {
 // https://en.wikipedia.org/wiki/PBKDF2
 @JsonSerializable()
 class PBKDF2KdfDerivator extends KdfDerivator {
-  PBKDF2KdfDerivator({this.c = defaultC, this.dklen = 32, Uint8List? salt, this.prf = PRF})
+  PBKDF2KdfDerivator(
+      {this.c = defaultC, this.dklen = 32, Uint8List? salt, this.prf = PRF})
       : salt = salt ?? CryptoRandom.global.nextBytes(32) {
     if (c <= 0 || dklen < 32 || prf != PRF || this.salt.isEmpty) {
       throw ArgumentError();
@@ -73,19 +75,22 @@ class PBKDF2KdfDerivator extends KdfDerivator {
 
   final int c; // number of iterations
   final int dklen; // length for the derived key. Must be >= 32
-  final String prf; // a pseudorandom function of two parameters with output length hLen (e.g. a keyed HMAC)
+  final String
+      prf; // a pseudorandom function of two parameters with output length hLen (e.g. a keyed HMAC)
   @JsonKey(toJson: bytesToHex, fromJson: hexToBytes)
   Uint8List salt; // salt passed to PBKDF
 
   @override
   Uint8List deriveKey(Uint8List password) {
     final Mac mac = HMac(SHA256Digest(), 64);
-    final impl = PBKDF2KeyDerivator(mac)..init(Pbkdf2Parameters(salt, c, dklen));
+    final impl = PBKDF2KeyDerivator(mac)
+      ..init(Pbkdf2Parameters(salt, c, dklen));
 
     return impl.process(password);
   }
 
-  factory PBKDF2KdfDerivator.fromJson(Map<String, dynamic> json) => _$PBKDF2KdfDerivatorFromJson(json);
+  factory PBKDF2KdfDerivator.fromJson(Map<String, dynamic> json) =>
+      _$PBKDF2KdfDerivatorFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$PBKDF2KdfDerivatorToJson(this);
@@ -98,7 +103,12 @@ class PBKDF2KdfDerivator extends KdfDerivator {
 // https://en.wikipedia.org/wiki/Scrypt
 @JsonSerializable()
 class ScryptKdfDerivator extends KdfDerivator {
-  ScryptKdfDerivator({this.dklen = 32, this.n = defaultN, this.r = 8, this.p = 1, Uint8List? salt})
+  ScryptKdfDerivator(
+      {this.dklen = 32,
+      this.n = defaultN,
+      this.r = 8,
+      this.p = 1,
+      Uint8List? salt})
       : salt = salt ?? CryptoRandom.global.nextBytes(32) {
     if (dklen != 32 || n <= 0 || r <= 0 || p <= 0 || this.salt.isEmpty) {
       throw ArgumentError();
@@ -122,7 +132,8 @@ class ScryptKdfDerivator extends KdfDerivator {
     return impl.process(password);
   }
 
-  factory ScryptKdfDerivator.fromJson(Map<String, dynamic> json) => _$ScryptKdfDerivatorFromJson(json);
+  factory ScryptKdfDerivator.fromJson(Map<String, dynamic> json) =>
+      _$ScryptKdfDerivatorFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$ScryptKdfDerivatorToJson(this);
@@ -172,7 +183,8 @@ class EncryptedMessage {
 
   EncryptedMessage(this.cipherText, this.nonce);
 
-  factory EncryptedMessage.fromJson(Map<String, dynamic> json) => _$EncryptedMessageFromJson(json);
+  factory EncryptedMessage.fromJson(Map<String, dynamic> json) =>
+      _$EncryptedMessageFromJson(json);
 
   Map<String, dynamic> toJson() => _$EncryptedMessageToJson(this);
 }
@@ -186,7 +198,8 @@ class Crypto {
   Uint8List cipherText;
   Kdf kdf;
   @JsonKey(name: 'kdfparams')
-  KdfDerivator kdfParams; // KDF-dependent static and dynamic parameters to the KDF function
+  KdfDerivator
+      kdfParams; // KDF-dependent static and dynamic parameters to the KDF function
   String
       mac; // SHA3 (keccak-256) of the concatenation of the last 16 bytes of the derived key together with the full ciphertext
 
@@ -208,7 +221,8 @@ class Crypto {
     }
   }
 
-  factory Crypto.from(String password, Uint8List secret, {KdfDerivator? kdfParams, bool cacheDerivedKey = false}) {
+  factory Crypto.from(String password, Uint8List secret,
+      {KdfDerivator? kdfParams, bool cacheDerivedKey = false}) {
     var c = Crypto(
       cipher: Cipher.aes128Ctr,
       cipherParams: CipherParams(),
@@ -228,7 +242,8 @@ class Crypto {
     return _encryptOrDecrypt(password, cipherText, cipherParams.iv);
   }
 
-  bool validate(String password, {bool willThrow = false, bool cacheDerivedKey = false}) {
+  bool validate(String password,
+      {bool willThrow = false, bool cacheDerivedKey = false}) {
     final derivedKey = _deriveKey(password, cacheDerivedKey);
     final b = _generateMac(derivedKey, cipherText) == mac;
     if (!b && willThrow) throw ArgumentError.value(password, 'password');
@@ -275,7 +290,8 @@ class Crypto {
   }
 
   static String _generateMac(Uint8List derivedKey, Uint8List cipherText) {
-    final macBody = Uint8List.fromList(derivedKey.sublist(16, 32).toList()..addAll(cipherText));
+    final macBody = Uint8List.fromList(
+        derivedKey.sublist(16, 32).toList()..addAll(cipherText));
     return bytesToHex(keccak256(macBody));
   }
 

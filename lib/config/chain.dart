@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Chain {
-  final ChainCoin coin; // chain native coin name (usually uniquely identify a specific chain), e.g., ETH, ETC
+  final ChainCoin
+      coin; // chain native coin name (usually uniquely identify a specific chain), e.g., ETH, ETC
   final ChainType type; // chain underlying type, e.g., ETH
   final String? chainID; // chain id
   final bool isTestNet;
@@ -10,7 +11,8 @@ class Chain {
   final dynamic icon;
   final dynamic
       iconPlaceholder; // icon placeholder for smart contract tokens of which the original icon cannot be found; it could be the faded version of `icon`
-  final String? nodeURL; // public api url of specific chain node, e.g., https://mainnet.infura.io
+  final String?
+      nodeURL; // public api url of specific chain node, e.g., https://mainnet.infura.io
   final String? vendorURL; // public api url provided by specific vendor
   final Map<String, dynamic>? extra;
 
@@ -21,7 +23,8 @@ class Chain {
     this.isTestNet = false,
     required this.name,
     required String icon,
-    String? iconPlaceholder, // should not be specified if smart contract token is not supported
+    String?
+        iconPlaceholder, // should not be specified if smart contract token is not supported
     this.nodeURL,
     this.vendorURL,
     this.extra,

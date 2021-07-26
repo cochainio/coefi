@@ -8,7 +8,8 @@ part 'ethkeystore.g.dart';
 
 String _ethereumAddressToJson(EthereumAddress a) => a.hex;
 
-EthereumAddress _ethereumAddressFromJson(String a) => EthereumAddress.fromHex(a);
+EthereumAddress _ethereumAddressFromJson(String a) =>
+    EthereumAddress.fromHex(a);
 
 @JsonSerializable()
 class ETHKeystore extends Keystore {
@@ -18,11 +19,14 @@ class ETHKeystore extends Keystore {
 
   ETHKeystore();
 
-  ETHKeystore.from(String password, String privateKey, {String? id, KeystoreMeta? meta, bool clearCache = true})
+  ETHKeystore.from(String password, String privateKey,
+      {String? id, KeystoreMeta? meta, bool clearCache = true})
       : super(id: id, meta: meta) {
     final privateKeyBytes = hexToBytes(privateKey);
-    if (privateKeyBytes.length != 64) throw ArgumentError.value(privateKey, 'privateKey');
-    crypto = Crypto.from(password, hexToBytes(privateKey), cacheDerivedKey: !clearCache);
+    if (privateKeyBytes.length != 64)
+      throw ArgumentError.value(privateKey, 'privateKey');
+    crypto = Crypto.from(password, hexToBytes(privateKey),
+        cacheDerivedKey: !clearCache);
     final publicKeyBytes = privateKeyBytesToPublic(privateKeyBytes);
     publicKey = bytesToHex(publicKeyBytes);
     address = EthereumAddress.fromPublicKey(publicKeyBytes);
@@ -51,7 +55,12 @@ class ETHMnemonicKeystore extends MnemonicKeystore {
   ETHMnemonicKeystore();
 
   ETHMnemonicKeystore.from(String password,
-      {String? mnemonic, String? language, String? hdPath, String? id, KeystoreMeta? meta, bool clearCache = true})
+      {String? mnemonic,
+      String? language,
+      String? hdPath,
+      String? id,
+      KeystoreMeta? meta,
+      bool clearCache = true})
       : super.from(password,
             mnemonic: mnemonic,
             language: language,

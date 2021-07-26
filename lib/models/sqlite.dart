@@ -32,8 +32,10 @@ class SQLDatabase extends _$SQLDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities {
     return [
       ...super.allSchemaEntities,
-      Index('wallet_sort_order', 'CREATE UNIQUE INDEX IF NOT EXISTS wallet_sort_order ON wallet_table(sort_order)'),
-      Index('wallet_name', 'CREATE UNIQUE INDEX IF NOT EXISTS wallet_name ON wallet_table(name)'),
+      Index('wallet_sort_order',
+          'CREATE UNIQUE INDEX IF NOT EXISTS wallet_sort_order ON wallet_table(sort_order)'),
+      Index('wallet_name',
+          'CREATE UNIQUE INDEX IF NOT EXISTS wallet_name ON wallet_table(name)'),
     ];
   }
 }

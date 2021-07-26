@@ -18,18 +18,26 @@ class BTCKeystore extends Keystore {
   BTCKeystore();
 
   BTCKeystore.from(String password,
-      {String? wif, Uint8List? privateKey, required bool isMainnet, bool? compressed, String? id, KeystoreMeta? meta})
+      {String? wif,
+      Uint8List? privateKey,
+      required bool isMainnet,
+      bool? compressed,
+      String? id,
+      KeystoreMeta? meta})
       : super(id: id, meta: meta) {
     final network = isMainnet ? bitcoin : testnet;
 
     ECPair ecPair;
     if (wif != null) {
       ecPair = ECPair.fromWIF(wif, network: network);
-      if (compressed != null && compressed != ecPair.compressed) throw ArgumentError('Inconsistent `compressed`');
+      if (compressed != null && compressed != ecPair.compressed)
+        throw ArgumentError('Inconsistent `compressed`');
     } else if (privateKey != null) {
-      ecPair = ECPair.fromPrivateKey(privateKey, network: network, compressed: compressed);
+      ecPair = ECPair.fromPrivateKey(privateKey,
+          network: network, compressed: compressed);
     } else {
-      throw ArgumentError('Only one of `wif` and `privateKey` should be specified');
+      throw ArgumentError(
+          'Only one of `wif` and `privateKey` should be specified');
     }
 
     crypto = Crypto.from(password, utf8.encode(ecPair.toWIF()) as Uint8List);
@@ -88,9 +96,13 @@ class BTCMnemonicKeystore extends MnemonicKeystore {
     return bytesToHex(extendedPrivateKey(password).publicKey);
   }
 
-  Uint8List derivePrivateKey(String password, {required bool isChange, required int index}) {
+  Uint8List derivePrivateKey(String password,
+      {required bool isChange, required int index}) {
     final extendedPrivateKey = this.extendedPrivateKey(password);
-    return extendedPrivateKey.derive(isChange ? 1 : 0).derive(index).privateKey!;
+    return extendedPrivateKey
+        .derive(isChange ? 1 : 0)
+        .derive(index)
+        .privateKey!;
   }
 
   factory BTCMnemonicKeystore.fromJson(Map<String, dynamic> json) {

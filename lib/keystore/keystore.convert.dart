@@ -26,7 +26,8 @@ class KeystoreConverter extends TypeConverter<Keystore, String> {
   }
 }
 
-class MnemonicKeystoreConverter extends TypeConverter<MnemonicKeystore, String> {
+class MnemonicKeystoreConverter
+    extends TypeConverter<MnemonicKeystore, String> {
   const MnemonicKeystoreConverter();
 
   @override
@@ -46,7 +47,8 @@ class MnemonicKeystoreConverter extends TypeConverter<MnemonicKeystore, String> 
   }
 }
 
-Keystore keystoreFromJson(KeystoreType keystoreType, Map<String, dynamic> json) {
+Keystore keystoreFromJson(
+    KeystoreType keystoreType, Map<String, dynamic> json) {
   switch (keystoreType) {
     case KeystoreType.BTC:
       return BTCKeystore.fromJson(json);

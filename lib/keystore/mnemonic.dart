@@ -5,7 +5,8 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:bip39/src/wordlists/english.dart' as eng; // ignore: implementation_imports
+import 'package:bip39/src/wordlists/english.dart'
+    as eng; // ignore: implementation_imports
 
 class Mnemonic {
   // ignore: constant_identifier_names
@@ -57,7 +58,8 @@ class Mnemonic {
     var wordList = wordLists[language];
     if (wordList == null) throw ArgumentError('no word list for $language');
     if (wordList.length == 1) {
-      var wordListStr = await rootBundle.loadString('packages/bip39/src/wordlists/${wordList[0]}');
+      var wordListStr = await rootBundle
+          .loadString('packages/bip39/src/wordlists/${wordList[0]}');
       wordList = (jsonDecode(wordListStr) as List<dynamic>).cast<String>();
       wordLists[language] = wordList;
     }
@@ -74,7 +76,8 @@ class Mnemonic {
 
   static String generateMnemonic([String? language, int strength = 128]) {
     language ??= English;
-    if (!strengthToLength.containsKey(strength)) throw ArgumentError.value(strength, 'strength');
+    if (!strengthToLength.containsKey(strength))
+      throw ArgumentError.value(strength, 'strength');
     var wordList = wordLists[language];
     if (wordList == null || wordList.length == 1) {
       throw ArgumentError('word list for language `$language` is not loaded');

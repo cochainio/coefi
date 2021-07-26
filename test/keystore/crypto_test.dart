@@ -9,7 +9,8 @@ import '../print.dart';
 
 void main() {
   const password = 'testpassword';
-  final secret = hexToBytes('7a28b5ba57c53603b0b07b56bba752f7784bf506fa95edc395f5cf6c7514fe9d');
+  final secret = hexToBytes(
+      '7a28b5ba57c53603b0b07b56bba752f7784bf506fa95edc395f5cf6c7514fe9d');
 
   group('Crypto', () {
     test('random generation timer', () {
@@ -20,7 +21,8 @@ void main() {
       printWrapped('Scrypt elapsed ${sw.elapsed}');
 
       sw.reset();
-      final c2 = Crypto.from(password, secret, kdfParams: PBKDF2KdfDerivator(c: 65536), cacheDerivedKey: true);
+      final c2 = Crypto.from(password, secret,
+          kdfParams: PBKDF2KdfDerivator(c: 65536), cacheDerivedKey: true);
       c2.validate(password, willThrow: true);
       printWrapped('PBKDF2 elapsed ${sw.elapsed}');
 

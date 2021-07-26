@@ -61,7 +61,8 @@ final Map<ChainCoin, Chain> chainsConfig = {
     type: ChainType.FILECOIN,
     name: 'Filecoin',
     icon: 'assets/images/coins/fil.png',
-    nodeURL: 'https://1vcIIxZbXKA1axbK8ygFC3vTdRU:d3f77bb36ccdb228d6047c174b3dc4a6@filecoin.infura.io',
+    nodeURL:
+        'https://1vcIIxZbXKA1axbK8ygFC3vTdRU:d3f77bb36ccdb228d6047c174b3dc4a6@filecoin.infura.io',
   ),
   ChainCoin.ATOM: Chain(
     coin: ChainCoin.ATOM,

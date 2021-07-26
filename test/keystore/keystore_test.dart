@@ -23,7 +23,8 @@ void main() {
 
         final encoded = keystore.toJson();
 
-        expect(encoded['crypto']['ciphertext'], keystoreJson['crypto']['ciphertext']);
+        expect(encoded['crypto']['ciphertext'],
+            keystoreJson['crypto']['ciphertext']);
       });
     });
   });

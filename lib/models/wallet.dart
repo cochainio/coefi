@@ -21,7 +21,8 @@ class WalletTable extends Table {
 
   IntColumn get sortOrder => integer()();
 
-  TextColumn get name => text().withLength(max: kWalletNameMaxLength)(); // wallet name
+  TextColumn get name =>
+      text().withLength(max: kWalletNameMaxLength)(); // wallet name
 
   TextColumn get coin => text()(); // chain native coin
 
@@ -38,14 +39,19 @@ class WalletTable extends Table {
 
 @JsonSerializable()
 class WalletMeta {
-  WalletMeta({required this.keystoreType, this.backedUp = false, this.showTokens = false, this.avatar});
+  WalletMeta(
+      {required this.keystoreType,
+      this.backedUp = false,
+      this.showTokens = false,
+      this.avatar});
 
   KeystoreType keystoreType;
   bool backedUp;
   bool showTokens;
   String? avatar;
 
-  factory WalletMeta.fromJson(Map<String, dynamic> json) => _$WalletMetaFromJson(json);
+  factory WalletMeta.fromJson(Map<String, dynamic> json) =>
+      _$WalletMetaFromJson(json);
 
   Map<String, dynamic> toJson() => _$WalletMetaToJson(this);
 }
