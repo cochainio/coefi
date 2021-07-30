@@ -23,8 +23,9 @@ class ETHKeystore extends Keystore {
       {String? id, KeystoreMeta? meta, bool clearCache = true})
       : super(id: id, meta: meta) {
     final privateKeyBytes = hexToBytes(privateKey);
-    if (privateKeyBytes.length != 64)
+    if (privateKeyBytes.length != 32) {
       throw ArgumentError.value(privateKey, 'privateKey');
+    }
     crypto = Crypto.from(password, hexToBytes(privateKey),
         cacheDerivedKey: !clearCache);
     final publicKeyBytes = privateKeyBytesToPublic(privateKeyBytes);
